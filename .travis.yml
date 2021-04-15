@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t uchestik/react-test -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true uchestik/react-test npm run test
+
+# build images of all the services so they can be pushed to 
+# docker hub
+after_success:
+  - docker build -t uchestik/fib-client ./frontend
+  - docker build -t uchestik/fib-server ./server
+  - docker build -t uchestik/fib-nginx ./nginx
+  - docker build -t uchestik/fib-workder ./worker
+
+  # log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #push images to dockerhub
+  - docker push uchestik/fib-client
+  - docker push uchestik/fib-server
+  - docker push uchestik/fib-nginx
+  - docker push uchestik/fib-worker
