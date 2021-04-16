@@ -14,7 +14,7 @@ after_success:
   - docker build -t uchestik/fib-client ./frontend
   - docker build -t uchestik/fib-server ./server
   - docker build -t uchestik/fib-nginx ./nginx
-  - docker build -t uchestik/fib-workder ./worker
+  - docker build -t uchestik/fib-worker ./worker
 
   # log in to docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
